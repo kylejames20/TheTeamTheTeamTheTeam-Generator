@@ -1,0 +1,44 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+a:hover {
+    color: black;
+}
+
+
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 5px;
+}
+
+
+
+nav {
+    background-color: white;
+    color: blue;
+    margin-bottom: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.engineercard {
+    border: black solid 2px;
+    justify-content: space-around;
+    width: fit-content;
+}
+
+.interncard {
+    border: black solid 2px;
+    justify-content: space-around;
+    width: fit-content;
+}
+
+.managercard {
+    border: black solid 2px;
+    justify-content: center;
+    width: fit-content;
+}
