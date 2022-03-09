@@ -1,20 +1,22 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
+const engineer = require('./lib/Engineer');
+const intern = require('./lib/Intern');
+const manager = require('./lib/Manager');
+
 let theTeam = {
     manager: "",
     engineers: [],
     interns: [],
 };
 
-
-
 const newManager = () => {
     inquirer
         .prompt([
             {
                 type: 'input',
-                name: 'teamManagerName',
+                name: 'managerName',
                 message: 'What is the name of your manager?',
             },
             {
@@ -34,7 +36,7 @@ const newManager = () => {
             },
         ])
         .then((answers) => {
-            theTeam.manager = answers;
+            theTeam.manager = new manager(answers.managerName, answers.employeeID, answers.email, answers.officeNumber);
             theMenu();
         });
 };
@@ -70,7 +72,7 @@ const newEngineer = () => {
             },
         ])
         .then((answers) => {
-            theTeam.engineers.push(answers);
+            theTeam.engineers.push(new engineer(answers.engineerName, answers.engineerID, answers.engineerGithubName, answers.engineerGithubLink));
             theMenu();
         });
 }
@@ -95,10 +97,11 @@ const newIntern = () => {
                 },
             ])
             .then((answers) => {
-                theTeam.interns.push(answers);
+                theTeam.interns.push(new intern(answers.internName, answers.internEmail, answers.internUniversity));
                 theMenu();
             });
         };
+
 const theMenu = () => {
     inquirer
         .prompt([
@@ -123,6 +126,7 @@ const theMenu = () => {
            } //renderHTML??
         });
 };
+
 function init() {
     const managerInfo = newManager();
     // newEngineer();
