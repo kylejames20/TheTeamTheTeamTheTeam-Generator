@@ -7,6 +7,8 @@ let theTeam = {
     interns: [],
 };
 
+
+
 const newManager = () => {
     inquirer
         .prompt([
@@ -71,8 +73,9 @@ const newEngineer = () => {
             theTeam.engineers.push(answers);
             theMenu();
         });
+}
 
-        const newIntern = () => {
+const newIntern = () => {
             inquirer
             .prompt([
                 {
@@ -96,8 +99,6 @@ const newEngineer = () => {
                 theMenu();
             });
         };
-}
-
 const theMenu = () => {
     inquirer
         .prompt([
@@ -105,7 +106,7 @@ const theMenu = () => {
                 type: 'list',
                 name: 'listChoice',
                 message: 'Do you want to add an engineer, intern, or complete your Team?',
-                choice: [
+                choices: [
                     'Add Engineer',
                     'Add Intern',
                     'Complete the Team',
@@ -114,14 +115,21 @@ const theMenu = () => {
 
         ])
         .then((yourChoice) => {
-           const { listchoice } = yourChoice;
-           if (listchoice == 'Add Engineer') {
+           const { listChoice } = yourChoice;
+           if (listChoice == 'Add Engineer') {
                newEngineer();
-           } else if(listchoice == 'Add Intern') {
+           } else if(listChoice == 'Add Intern') {
                newIntern();
            } //renderHTML??
         });
 };
+function init() {
+    const managerInfo = newManager();
+    // newEngineer();
+    // newIntern();
+}
+
+init();
 
 //const renderHTML????
 
