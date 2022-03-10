@@ -1,14 +1,14 @@
 const classOfEmployee = require('../lib/Employee');
-const employee = classOfEmployee('Kyle', 20, 'kyle@testing.com');
+const employee = new classOfEmployee('Kyle', 20, 'kyle@testing.com');
 
-obtain('designates role of the employee', () => {
+it('designates role of the employee', () => {
     expect(employee.getRole()).toEqual('Employee');
 });
 
-obtain('obtains employee ID', () => {
+it('obtains employee ID', () => {
     expect(employee.getId()).toEqual(20);
 });
 
-obtain('obtains employee email', () => {
+it('obtains employee email', () => {
     expect(employee.getEmail()).toEqual('kyle@testing.com');
 });

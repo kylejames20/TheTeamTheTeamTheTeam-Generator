@@ -4,6 +4,7 @@ const fs = require('fs');
 const engineer = require('./lib/Engineer');
 const intern = require('./lib/Intern');
 const manager = require('./lib/Manager');
+const templateGen = require('./src/source');
 
 let theTeam = {
     manager: "",
@@ -38,7 +39,7 @@ const newManager = () => {
         .then((answers) => {
             const managerObj = new manager(answers.managerName, answers.employeeID, answers.email, answers.officeNumber)
             // theTeam.manager = new manager(answers.managerName, answers.employeeID, answers.email, answers.officeNumber);
-            theTeam.engineers.push({name: managerObj.name, id: managerObj.id, email: managerObj.getEmail(), officeNumber: managerObj.getofficeNumber(), getRole: managerObj.getRole()});
+            theTeam.manager = {name: managerObj.name, id: managerObj.id, email: managerObj.getEmail(), officeNumber: managerObj.getofficeNumber(), getRole: managerObj.getRole()};
             theMenu();
         });
 };
@@ -76,7 +77,7 @@ const newEngineer = () => {
         .then((answers) => {
             let engineersObj = new engineer(answers.engineerName, answers.engineerID, answers.engineerGithubName, answers.engineerGithubLink)
             // theTeam.engineers.push(new engineer(answers.engineerName, answers.engineerID, answers.engineerGithubName, answers.engineerGithubLink));
-            theTeam.engineers.push({name: engineersObj.name, id: engineersObj.id, email: engineersObj.getEmail(), github: engineersObj.getGithub()});
+            theTeam.engineers.push({name: engineersObj.name, id: engineersObj.id, email: engineersObj.getEmail(), github: engineersObj.getGithub(), getRole: engineersObj.getRole()});
             theMenu();
         });
 }
@@ -108,7 +109,7 @@ const newIntern = () => {
             .then((answers) => {
                 let internsObj = new intern(answers.internName, answers.internID, answers.internEmail, answers.internUniversity)
                 // theTeam.interns.push(new intern(answers.internName, answers.internID, answers.internEmail, answers.internUniversity));
-                theTeam.interns.push({name: internsObj.name, id: internsObj.id, email: internsObj.getEmail(), school: internsObj.getSchool()});
+                theTeam.interns.push({name: internsObj.name, id: internsObj.id, email: internsObj.getEmail(), school: internsObj.getSchool(), getRole: internsObj.getRole()});
                 theMenu();
             });
         };
@@ -120,9 +121,9 @@ const newIntern = () => {
     <h2>${theTeam.manager.name}</h2>
     <h3>${theTeam.manager.getRole}</h3>
     <section>
-        <h4>ID:${theTeam.manager.getID}</h4>
-        <h4>Email: <a href="mailto: ${theTeam.manager.getEmail}">${theTeam.manager.getEmail}</a></h4>
-        <h4>Office Number: ${theTeam.manager.getofficeNumber}</h4>
+        <h4>ID:${theTeam.manager.id}</h4>
+        <h4>Email: <a href="mailto: ${theTeam.manager.email}">${theTeam.manager.email}</a></h4>
+        <h4>Office Number: ${theTeam.manager.officeNumber}</h4>
     </section>
 </div>`
     allHTML.push(managerHTML)
@@ -131,9 +132,9 @@ const newIntern = () => {
         <div class="engineercard">
         <h2>${element.name}</h2>
         <h3>${element.getRole}</h3>
-        <h4>ID: ${element.getID}</h4>
-        <h4>Email: <a href="mailto: ${element.getEmail}">${element.getEmail}</a></h4>
-        <h4>Github: <a href="https://github.com/${element.getGithub}" target="_blank">${element.getGithub}</a></h4>
+        <h4>ID: ${element.id}</h4>
+        <h4>Email: <a href="mailto: ${element.email}">${element.email}</a></h4>
+        <h4>Github: <a href="https://github.com/${element.github}" target="_blank">${element.github}</a></h4>
     </div>`
       
     allHTML.push(engineerHTML);
@@ -144,14 +145,21 @@ const newIntern = () => {
         `  <div class="interncard">
         <h2>${element.name}</h2>
         <h3>${element.getRole}</h3>
-        <h3>ID: ${element.getID}</h3>
-        <h4>Email: <a href="mailto: ${element.getEmail}">${element.getEmail}</a></h4>
+        <h3>ID: ${element.id}</h3>
+        <h4>Email: <a href="mailto: ${element.email}">${element.email}</a></h4>
         <h4>School: ${element.school}</h4>
     </div>`
 
-    internsHTML.push(internsHTML);
+    allHTML.push(internsHTML);
     });
-    console.log(allHTML.join(''));
+    const docHTML = templateGen(allHTML.join(''));
+    fs.writeFile('./dist/create.html', docHTML, err => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        console.info('Created HTML ./dist/create.html')
+    });
 }
 
 
@@ -177,11 +185,10 @@ const theMenu = () => {
            } else if(listChoice == 'Add Intern') {
                newIntern();
            } else {
-               
+            createHTML();
+            console.log(theTeam)
            }
         });
-        createHTML();
-        console.log(theTeam)
 };
 
 function init() {

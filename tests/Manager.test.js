@@ -1,10 +1,10 @@
 const classOfManager = require('../lib/Manager');
-const manager = classOfManager('Kyle', 20, 'kyle@testing.com');
+const manager = new classOfManager('Kyle', 20, 'kyle@testing.com', 20);
 
-obtain('designates role of the Manager', () => {
+it('designates role of the Manager', () => {
     expect(manager.getRole()).toEqual('Manager');
 });
 
-obtain('obtains office number for the manager', () => {
-    expect(manager.getofficeNumber()).toEqual(1);
+it('obtains office number for the manager', () => {
+    expect(manager.getofficeNumber()).toEqual(20);
 });
