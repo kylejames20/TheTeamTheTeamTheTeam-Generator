@@ -36,7 +36,9 @@ const newManager = () => {
             },
         ])
         .then((answers) => {
-            theTeam.manager = new manager(answers.managerName, answers.employeeID, answers.email, answers.officeNumber);
+            const managerObj = new manager(answers.managerName, answers.employeeID, answers.email, answers.officeNumber)
+            // theTeam.manager = new manager(answers.managerName, answers.employeeID, answers.email, answers.officeNumber);
+            theTeam.engineers.push({name: managerObj.name, id: managerObj.id, email: managerObj.getEmail(), officeNumber: managerObj.getofficeNumber(), getRole: managerObj.getRole()});
             theMenu();
         });
 };
@@ -72,7 +74,9 @@ const newEngineer = () => {
             },
         ])
         .then((answers) => {
-            theTeam.engineers.push(new engineer(answers.engineerName, answers.engineerID, answers.engineerGithubName, answers.engineerGithubLink));
+            let engineersObj = new engineer(answers.engineerName, answers.engineerID, answers.engineerGithubName, answers.engineerGithubLink)
+            // theTeam.engineers.push(new engineer(answers.engineerName, answers.engineerID, answers.engineerGithubName, answers.engineerGithubLink));
+            theTeam.engineers.push({name: engineersObj.name, id: engineersObj.id, email: engineersObj.getEmail(), github: engineersObj.getGithub()});
             theMenu();
         });
 }
@@ -87,6 +91,11 @@ const newIntern = () => {
                 },
                 {
                     type: 'input',
+                    name: 'internID',
+                    message: 'What is the ID for your intern?',
+                },
+                {
+                    type: 'input',
                     name: 'internEmail',
                     message: 'What is the email for your intern?',
                 },
@@ -97,10 +106,54 @@ const newIntern = () => {
                 },
             ])
             .then((answers) => {
-                theTeam.interns.push(new intern(answers.internName, answers.internEmail, answers.internUniversity));
+                let internsObj = new intern(answers.internName, answers.internID, answers.internEmail, answers.internUniversity)
+                // theTeam.interns.push(new intern(answers.internName, answers.internID, answers.internEmail, answers.internUniversity));
+                theTeam.interns.push({name: internsObj.name, id: internsObj.id, email: internsObj.getEmail(), school: internsObj.getSchool()});
                 theMenu();
             });
         };
+    
+
+    const createHTML = () => {
+    let allHTML = []    
+    const managerHTML = ` <div class="managercard">
+    <h2>${theTeam.manager.name}</h2>
+    <h3>${theTeam.manager.getRole}</h3>
+    <section>
+        <h4>ID:${theTeam.manager.getID}</h4>
+        <h4>Email: <a href="mailto: ${theTeam.manager.getEmail}">${theTeam.manager.getEmail}</a></h4>
+        <h4>Office Number: ${theTeam.manager.getofficeNumber}</h4>
+    </section>
+</div>`
+    allHTML.push(managerHTML)
+    theTeam.engineers.forEach(element => {
+        const engineerHTML = `  
+        <div class="engineercard">
+        <h2>${element.name}</h2>
+        <h3>${element.getRole}</h3>
+        <h4>ID: ${element.getID}</h4>
+        <h4>Email: <a href="mailto: ${element.getEmail}">${element.getEmail}</a></h4>
+        <h4>Github: <a href="https://github.com/${element.getGithub}" target="_blank">${element.getGithub}</a></h4>
+    </div>`
+      
+    allHTML.push(engineerHTML);
+    });
+
+    theTeam.interns.forEach(element => {
+        const internsHTML =
+        `  <div class="interncard">
+        <h2>${element.name}</h2>
+        <h3>${element.getRole}</h3>
+        <h3>ID: ${element.getID}</h3>
+        <h4>Email: <a href="mailto: ${element.getEmail}">${element.getEmail}</a></h4>
+        <h4>School: ${element.school}</h4>
+    </div>`
+
+    internsHTML.push(internsHTML);
+    });
+    console.log(allHTML.join(''));
+}
+
 
 const theMenu = () => {
     inquirer
@@ -123,8 +176,12 @@ const theMenu = () => {
                newEngineer();
            } else if(listChoice == 'Add Intern') {
                newIntern();
-           } //renderHTML??
+           } else {
+               
+           }
         });
+        createHTML();
+        console.log(theTeam)
 };
 
 function init() {
