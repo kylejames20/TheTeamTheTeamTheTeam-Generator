@@ -1,6 +1,6 @@
 # theteamtheteamtheteam-generator [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-![generated HTML screen shot](./images/theteamhtml.png)
+![generated HTML screen shot](./images/theteamtheteam.png)
 
 [Live link to theteam generator](https://youtu.be/FtjFlUOYNO8)
 
